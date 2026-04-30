@@ -837,11 +837,113 @@ footer strong { color: var(--accent2); }
   .hero-visual { width: 220px; height: 220px; }
   .avatar-ring { width: 170px; height: 170px; }
   .avatar-photo { width: 152px; height: 152px; }
-  .badge-1 { right: -10px; }
-  .badge-2 { right: -15px; }
-  .badge-3 { left: -10px; }
+
+  /* badges mais próximos para não vazar */
+  .badge-1 { top: 4px;  right: -8px;  font-size: 0.7rem; padding: 5px 10px; }
+  .badge-2 { bottom: 30px; right: -8px; font-size: 0.7rem; padding: 5px 10px; }
+  .badge-3 { bottom: 4px;  left: -8px;  font-size: 0.7rem; padding: 5px 10px; }
 
   .section { padding: 72px 16px; }
   .timeline { padding-left: 24px; }
   .timeline-dot { left: -30px; }
+
+  /* período não força quebra no card */
+  .period { white-space: normal; text-align: right; }
+
+  /* botões ocupam a largura disponível */
+  .hero-btns { flex-direction: column; align-items: center; }
+  .btn { width: 100%; max-width: 280px; text-align: center; }
+}
+
+/* ===== iPHONE 13 PRO MAX e similares (≤ 430px) ===== */
+@media (max-width: 430px) {
+  :root { --nav-h: 56px; }
+
+  /* NAV */
+  .nav-inner { padding: 0 16px; }
+
+  /* HERO */
+  #hero {
+    padding-top: calc(var(--nav-h) + 24px);
+    padding-left: 16px;
+    padding-right: 16px;
+    gap: 32px;
+    min-height: 100svh;
+  }
+
+  .hero-greeting { font-size: 0.85rem; }
+
+  .hero-name { font-size: clamp(1.9rem, 9vw, 2.4rem); }
+
+  .hero-title { font-size: 1rem; }
+
+  .hero-sub { font-size: 0.9rem; margin-bottom: 24px; }
+
+  /* avatar menor */
+  .hero-visual { width: 170px; height: 170px; }
+  .avatar-ring  { width: 134px; height: 134px; }
+  .avatar-photo { width: 118px; height: 118px; }
+
+  /* esconde badges no mobile pequeno — poluem o layout */
+  .floating-badge { display: none; }
+
+  /* SECTIONS */
+  .section { padding: 56px 16px; }
+
+  .section-title { font-size: 1.6rem; margin-bottom: 40px; }
+
+  /* SOBRE — stats em 2 colunas compactas */
+  .stat-card { padding: 16px 12px; }
+  .stat-num  { font-size: 2rem; }
+  .stat-label { font-size: 0.72rem; }
+
+  /* TIMELINE */
+  .timeline { padding-left: 20px; }
+  .timeline-dot  { left: -26px; top: 18px; width: 10px; height: 10px; }
+  .timeline-dot-sm { left: -24px; top: 16px; }
+
+  .timeline-card { padding: 16px; }
+  .timeline-card-compact { padding: 14px 16px; }
+
+  .timeline-header {
+    flex-direction: column;
+    gap: 6px;
+  }
+  .period {
+    align-self: flex-start;
+    white-space: normal;
+    font-size: 0.75rem;
+  }
+  .timeline-header h3 { font-size: 0.95rem; }
+  .company { font-size: 0.82rem; }
+
+  .timeline-card > p { font-size: 0.85rem; }
+  .tags span { font-size: 0.72rem; padding: 3px 8px; }
+
+  /* SKILLS — 1 coluna */
+  .skills-grid { grid-template-columns: 1fr; }
+  .skill-group { padding: 20px; }
+
+  /* FORMAÇÃO */
+  .edu-card { padding: 20px 16px; gap: 14px; }
+  .edu-icon  { width: 40px; height: 40px; font-size: 1rem; }
+  .edu-info h3 { font-size: 0.9rem; }
+
+  /* CONTATO — 2 por linha */
+  .contato-grid { gap: 12px; }
+  .contato-card {
+    flex: 1 1 calc(50% - 6px);
+    min-width: 0;
+    padding: 20px 12px;
+  }
+  .contato-card i { font-size: 1.5rem; }
+  .contato-card span { font-size: 0.75rem; word-break: break-all; }
+
+  /* WHATSAPP / BACK-TO-TOP */
+  .whatsapp-float { width: 46px; height: 46px; font-size: 1.4rem; bottom: 20px; left: 20px; }
+  .whatsapp-tooltip { display: none; }
+  .back-to-top { width: 38px; height: 38px; bottom: 20px; right: 20px; font-size: 0.8rem; }
+
+  /* FOOTER */
+  footer { font-size: 0.78rem; padding: 18px 16px; }
 }
