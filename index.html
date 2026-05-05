@@ -6,7 +6,7 @@
   <title>Rogério Salomão – .NET Developer</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232f81f7'/><text y='72' font-size='52' x='50%' text-anchor='middle' font-family='Inter,sans-serif' font-weight='800' fill='white'>RS</text></svg>" />
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
@@ -14,7 +14,7 @@
   <!-- NAV -->
   <nav id="navbar">
     <div class="nav-inner">
-      <span class="nav-logo">RS</span>
+      <span class="nav-logo"><i class="fas fa-laptop-code"></i></span>
       <ul class="nav-links">
         <li><a href="#sobre">Sobre</a></li>
         <li><a href="#experiencia">Experiência</a></li>
@@ -37,37 +37,37 @@
 
   <!-- HERO -->
   <section id="hero">
-    <div class="hero-top">
-      <div class="hero-avatar-wrap">
-        <img src="foto.jpeg" alt="Rogério Salomão Ribeiro" class="avatar-photo" />
-      </div>
-      <div class="hero-meta">
-        <span class="hero-greeting">Desenvolvedor .NET · 10+ anos</span>
-        <div class="hero-socials">
-          <a href="https://www.linkedin.com/in/rog%C3%A9rio-salom%C3%A3o-ribeiro-033597168/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-          <a href="https://github.com/rribeiro-30" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
-          <a href="mailto:rogerio_1034@hotmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
-        </div>
-      </div>
-    </div>
-
-    <h1 class="hero-name">Rogério<br />Salomão<br /><span>Ribeiro</span></h1>
-
-    <div class="hero-bottom">
-      <p class="hero-sub">Back-end · C# · .NET Core · SQL Server · Fintechs & Energia</p>
+    <div class="hero-content">
+      <p class="hero-greeting">Olá, me chamo</p>
+      <h1 class="hero-name">Rogério Salomão<br /><span>Ribeiro</span></h1>
+      <p class="hero-title">.NET Developer</p>
+      <p class="hero-sub">
+        Desenvolvedor back-end com mais de 10 anos de experiência em C#, .NET Core e SQL Server, atuando em fintechs e empresas de grande porte.
+      </p>
       <div class="hero-btns">
         <a href="#contato" class="btn btn-primary">Entrar em contato</a>
         <a href="#experiencia" class="btn btn-outline">Ver experiência</a>
       </div>
+      <div class="hero-socials">
+        <a href="https://www.linkedin.com/in/rog%C3%A9rio-salom%C3%A3o-ribeiro-033597168/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="https://github.com/rribeiro-30" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+        <a href="mailto:rogerio_1034@hotmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+      </div>
     </div>
-
-    <div class="hero-divider"></div>
+    <div class="hero-visual">
+      <div class="avatar-ring">
+        <img src="foto.jpeg" alt="Rogério Salomão Ribeiro" class="avatar-photo" />
+      </div>
+      <div class="floating-badge badge-1"><i class="fab fa-microsoft"></i> .NET Core</div>
+      <div class="floating-badge badge-2"><i class="fas fa-database"></i> SQL Server</div>
+      <div class="floating-badge badge-3"><i class="fas fa-plug"></i> APIs REST</div>
+    </div>
   </section>
 
   <!-- SOBRE -->
   <section id="sobre" class="section">
     <div class="container">
-      <h2 class="section-title"><span class="section-num">01</span> Sobre mim</h2>
+      <h2 class="section-title">Sobre mim</h2>
       <div class="sobre-grid">
         <div class="sobre-text reveal">
           <p>
@@ -105,15 +105,18 @@
   <!-- EXPERIÊNCIA -->
   <section id="experiencia" class="section section-dark">
     <div class="container">
-      <h2 class="section-title"><span class="section-num">02</span> Experiência</h2>
+      <h2 class="section-title">Experiência</h2>
       <div class="timeline">
 
         <div class="timeline-item reveal">
-          <span class="period">Nov 2024<br />Atual</span>
+          <div class="timeline-dot"></div>
           <div class="timeline-card">
             <div class="timeline-header">
-              <h3>Desenvolvedor .NET Pleno</h3>
-              <span class="company">AVITA</span>
+              <div>
+                <h3>Desenvolvedor .NET Pleno</h3>
+                <span class="company">AVITA</span>
+              </div>
+              <span class="period">Nov 2024 – Atual</span>
             </div>
             <p>Desenvolvimento de microserviços para integração com seguradoras e APIs em .NET Core. Criação de scripts e procedures em MySQL com Dapper, atuando em ciclos ágeis com daily e sprint planning.</p>
             <div class="tags">
@@ -123,11 +126,14 @@
         </div>
 
         <div class="timeline-item reveal">
-          <span class="period">Mar 2023<br />Out 2024</span>
+          <div class="timeline-dot"></div>
           <div class="timeline-card">
             <div class="timeline-header">
-              <h3>Desenvolvedor .NET Pleno</h3>
-              <span class="company">Delta Energia</span>
+              <div>
+                <h3>Desenvolvedor .NET Pleno</h3>
+                <span class="company">Delta Energia</span>
+              </div>
+              <span class="period">Mar 2023 – Out 2024</span>
             </div>
             <p>Desenvolvimento e manutenção do sistema de gestão da empresa, resolução de bugs e criação de APIs em .NET Core. Gestão de banco de dados com SQL Server e Dapper, entregas em metodologia ágil.</p>
             <div class="tags">
@@ -137,11 +143,14 @@
         </div>
 
         <div class="timeline-item reveal">
-          <span class="period">Jun 2022<br />Fev 2023</span>
+          <div class="timeline-dot"></div>
           <div class="timeline-card">
             <div class="timeline-header">
-              <h3>Desenvolvedor SRE Pleno</h3>
-              <span class="company">NEON Pagamentos</span>
+              <div>
+                <h3>Desenvolvedor SRE Pleno</h3>
+                <span class="company">NEON Pagamentos</span>
+              </div>
+              <span class="period">Jun 2022 – Fev 2023</span>
             </div>
             <p>Apoio às squads de Empréstimo Pessoal com foco em sustentabilidade. Análise de incidentes, monitoração via Dynatrace, deploy de aplicações e desenvolvimento de novas funcionalidades em ambiente de alta escala.</p>
             <div class="tags">
@@ -151,11 +160,14 @@
         </div>
 
         <div class="timeline-item reveal">
-          <span class="period">Nov 2021<br />Mai 2022</span>
+          <div class="timeline-dot"></div>
           <div class="timeline-card">
             <div class="timeline-header">
-              <h3>Desenvolvedor .NET Pleno</h3>
-              <span class="company">Banco Alfa de Investimentos</span>
+              <div>
+                <h3>Desenvolvedor .NET Pleno</h3>
+                <span class="company">Banco Alfa de Investimentos</span>
+              </div>
+              <span class="period">Nov 2021 – Mai 2022</span>
             </div>
             <p>Criação de novas funcionalidades e resolução de problemas nos sistemas do banco. Desenvolvimento de APIs em .NET Core e gestão de banco de dados SQL Server.</p>
             <div class="tags">
@@ -165,11 +177,14 @@
         </div>
 
         <div class="timeline-item reveal">
-          <span class="period">Abr 2021<br />Nov 2021</span>
+          <div class="timeline-dot"></div>
           <div class="timeline-card">
             <div class="timeline-header">
-              <h3>Especialista de Sistemas I</h3>
-              <span class="company">Interplayers</span>
+              <div>
+                <h3>Especialista de Sistemas I</h3>
+                <span class="company">Interplayers</span>
+              </div>
+              <span class="period">Abr 2021 – Nov 2021</span>
             </div>
             <p>Desenvolvimento de funcionalidades e APIs para consumo via Front End. Análise e resolução de problemas utilizando C# .NET Core e SQL Server.</p>
             <div class="tags">
@@ -179,44 +194,56 @@
         </div>
 
         <div class="timeline-item reveal">
-          <span class="period">Out 2020<br />Abr 2021</span>
+          <div class="timeline-dot timeline-dot-sm"></div>
           <div class="timeline-card timeline-card-compact">
             <div class="timeline-header">
-              <h3>Programador .NET Pleno</h3>
-              <span class="company">Best.Projects</span>
+              <div>
+                <h3>Programador .NET Pleno</h3>
+                <span class="company">Best.Projects</span>
+              </div>
+              <span class="period">Out 2020 – Abr 2021</span>
             </div>
             <p>Geração e leitura de arquivos bancários, web services e resolução de problemas em produção. C# .NET MVC + SQL Server.</p>
           </div>
         </div>
 
         <div class="timeline-item reveal">
-          <span class="period">Mai 2018<br />Set 2020</span>
+          <div class="timeline-dot timeline-dot-sm"></div>
           <div class="timeline-card timeline-card-compact">
             <div class="timeline-header">
-              <h3>Programador .NET Júnior</h3>
-              <span class="company">Verity Group</span>
+              <div>
+                <h3>Programador .NET Júnior</h3>
+                <span class="company">Verity Group</span>
+              </div>
+              <span class="period">Mai 2018 – Set 2020</span>
             </div>
             <p>Manutenção e implementação de soluções para sistema do Banco Carrefour. C# .NET MVC + SQL Server.</p>
           </div>
         </div>
 
         <div class="timeline-item reveal">
-          <span class="period">Set 2016<br />Mai 2018</span>
+          <div class="timeline-dot timeline-dot-sm"></div>
           <div class="timeline-card timeline-card-compact">
             <div class="timeline-header">
-              <h3>Programador Delphi/.NET Júnior</h3>
-              <span class="company">MJDS Assessoria e Processamento de Dados</span>
+              <div>
+                <h3>Programador Delphi/.NET Júnior</h3>
+                <span class="company">MJDS Assessoria e Processamento de Dados</span>
+              </div>
+              <span class="period">Set 2016 – Mai 2018</span>
             </div>
             <p>Manutenção de sistema de Previdência Privada com Delphi e C# .NET MVC.</p>
           </div>
         </div>
 
         <div class="timeline-item reveal">
-          <span class="period">Abr 2015<br />Mai 2016</span>
+          <div class="timeline-dot timeline-dot-sm"></div>
           <div class="timeline-card timeline-card-compact">
             <div class="timeline-header">
-              <h3>Auxiliar de Programação</h3>
-              <span class="company">Guard Informática</span>
+              <div>
+                <h3>Auxiliar de Programação</h3>
+                <span class="company">Guard Informática</span>
+              </div>
+              <span class="period">Abr 2015 – Mai 2016</span>
             </div>
             <p>Desenvolvimento de sistema em Delphi XE6, migração de xHarbour e automação comercial com PostgreSQL.</p>
           </div>
@@ -229,7 +256,7 @@
   <!-- FORMAÇÃO -->
   <section id="formacao" class="section">
     <div class="container">
-      <h2 class="section-title"><span class="section-num">03</span> Formação</h2>
+      <h2 class="section-title">Formação</h2>
       <div class="edu-grid">
         <div class="edu-card reveal">
           <div class="edu-icon"><i class="fas fa-graduation-cap"></i></div>
@@ -246,34 +273,94 @@
   <!-- SKILLS -->
   <section id="skills" class="section section-dark">
     <div class="container">
-      <h2 class="section-title"><span class="section-num">04</span> Skills</h2>
+      <h2 class="section-title">Skills</h2>
       <div class="skills-grid">
 
         <div class="skill-group reveal">
-          <p class="skill-group-label"><i class="fas fa-code"></i> Back-end</p>
-          <div class="skill-tags">
-            <span>C#</span><span>.NET Core</span><span>ASP.NET MVC</span><span>APIs RESTful</span><span>Dapper</span>
+          <h3><i class="fas fa-code"></i> Back-end</h3>
+          <div class="skill-list">
+            <div class="skill-item">
+              <span>C# / .NET Core</span>
+              <div class="skill-bar"><div class="skill-fill" data-width="95"></div></div>
+            </div>
+            <div class="skill-item">
+              <span>ASP.NET MVC / Core</span>
+              <div class="skill-bar"><div class="skill-fill" data-width="92"></div></div>
+            </div>
+            <div class="skill-item">
+              <span>APIs RESTful</span>
+              <div class="skill-bar"><div class="skill-fill" data-width="92"></div></div>
+            </div>
+            <div class="skill-item">
+              <span>Dapper</span>
+              <div class="skill-bar"><div class="skill-fill" data-width="85"></div></div>
+            </div>
           </div>
         </div>
 
         <div class="skill-group reveal">
-          <p class="skill-group-label"><i class="fas fa-database"></i> Banco de Dados</p>
-          <div class="skill-tags">
-            <span>SQL Server</span><span>MySQL</span><span>PostgreSQL</span><span>Stored Procedures</span>
+          <h3><i class="fas fa-database"></i> Banco de Dados</h3>
+          <div class="skill-list">
+            <div class="skill-item">
+              <span>SQL Server</span>
+              <div class="skill-bar"><div class="skill-fill" data-width="92"></div></div>
+            </div>
+            <div class="skill-item">
+              <span>MySQL</span>
+              <div class="skill-bar"><div class="skill-fill" data-width="78"></div></div>
+            </div>
+            <div class="skill-item">
+              <span>PostgreSQL</span>
+              <div class="skill-bar"><div class="skill-fill" data-width="65"></div></div>
+            </div>
+            <div class="skill-item">
+              <span>Stored Procedures</span>
+              <div class="skill-bar"><div class="skill-fill" data-width="88"></div></div>
+            </div>
           </div>
         </div>
 
         <div class="skill-group reveal">
-          <p class="skill-group-label"><i class="fas fa-tools"></i> Ferramentas & Infra</p>
-          <div class="skill-tags">
-            <span>Git</span><span>GitHub</span><span>RabbitMQ</span><span>Kafka</span><span>Dynatrace</span><span>Grafana</span><span>Jenkins</span><span>GoCD</span>
+          <h3><i class="fas fa-tools"></i> Ferramentas & Infra</h3>
+          <div class="skill-list">
+            <div class="skill-item">
+              <span>Git / GitHub</span>
+              <div class="skill-bar"><div class="skill-fill" data-width="88"></div></div>
+            </div>
+            <div class="skill-item">
+              <span>RabbitMQ / Kafka</span>
+              <div class="skill-bar"><div class="skill-fill" data-width="68"></div></div>
+            </div>
+            <div class="skill-item">
+              <span>Dynatrace / Grafana</span>
+              <div class="skill-bar"><div class="skill-fill" data-width="65"></div></div>
+            </div>
+            <div class="skill-item">
+              <span>Jenkins / GoCD</span>
+              <div class="skill-bar"><div class="skill-fill" data-width="60"></div></div>
+            </div>
           </div>
         </div>
 
         <div class="skill-group reveal">
-          <p class="skill-group-label"><i class="fas fa-layer-group"></i> Práticas</p>
-          <div class="skill-tags">
-            <span>Microserviços</span><span>Scrum</span><span>Bug Analysis</span><span>Integração de Sistemas</span>
+          <h3><i class="fas fa-layer-group"></i> Práticas</h3>
+          <div class="skill-list">
+            <div class="skill-item">
+              <span>Microserviços</span>
+              <div class="skill-bar"><div class="skill-fill" data-width="80"></div></div>
+            </div>
+            <div class="skill-item">
+              <span>Metodologia Ágil (Scrum)</span>
+              <div class="skill-bar"><div class="skill-fill" data-width="90"></div></div>
+            </div>
+            <div class="skill-item">
+              <span>Análise e Resolução de Bugs</span>
+              <div class="skill-bar"><div class="skill-fill" data-width="92"></div></div>
+            </div>
+            <div class="skill-item">
+              <span>Integração de Sistemas</span>
+              <div class="skill-bar"><div class="skill-fill" data-width="85"></div></div>
+            </div>
           </div>
         </div>
 
@@ -284,7 +371,7 @@
   <!-- CONTATO -->
   <section id="contato" class="section">
     <div class="container">
-      <h2 class="section-title"><span class="section-num">05</span> Contato</h2>
+      <h2 class="section-title">Contato</h2>
       <p class="contato-sub reveal">Aberto a novas oportunidades — vamos conversar!</p>
       <div class="contato-grid">
 
