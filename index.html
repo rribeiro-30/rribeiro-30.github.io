@@ -3,421 +3,1200 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rogério Salomão – .NET Developer</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232f81f7'/><text y='72' font-size='52' x='50%' text-anchor='middle' font-family='Inter,sans-serif' font-weight='800' fill='white'>RS</text></svg>" />
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <title>Rogério Salomão Ribeiro — Desenvolvedor .NET</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cyan:    #00e5ff;
+      --cyan-dim: #00b8d9;
+      --purple:  #7c3aed;
+      --purple-dim: #5b21b6;
+      --navy:    #050d1a;
+      --navy-mid: #0a1628;
+      --navy-card: #0d1f3c;
+      --navy-border: #162944;
+      --white:   #f0f6ff;
+      --muted:   #8bacc8;
+      --font-main: 'Space Grotesk', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-main);
+      background: var(--navy);
+      color: var(--white);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ─── Custom cursor ─── */
+    .cursor-dot {
+      width: 8px; height: 8px;
+      background: var(--cyan);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.08s ease;
+    }
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border: 1.5px solid var(--cyan);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.18s ease, width 0.18s ease, height 0.18s ease, opacity 0.18s ease;
+      opacity: 0.6;
+    }
+    body:hover .cursor-ring { opacity: 0.6; }
+    .cursor-ring.hover { width: 56px; height: 56px; opacity: 0.9; border-color: var(--purple); }
+
+    /* ─── Antigravity canvas ─── */
+    #bg-canvas {
+      position: fixed; inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ─── Three.js scene ─── */
+    #three-canvas {
+      position: fixed; inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.55;
+    }
+
+    /* ─── Layout ─── */
+    .page { position: relative; z-index: 2; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 3rem;
+      backdrop-filter: blur(16px);
+      background: rgba(5, 13, 26, 0.72);
+      border-bottom: 1px solid rgba(0, 229, 255, 0.08);
+      transition: padding 0.3s;
+    }
+    nav.scrolled { padding: 0.6rem 3rem; }
+    .nav-logo {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      color: var(--cyan);
+      letter-spacing: 0.04em;
+    }
+    .nav-logo span { color: var(--white); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 1px; background: var(--cyan);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.25s ease;
+    }
+    .nav-links a:hover { color: var(--cyan); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-cta {
+      padding: 0.45rem 1.2rem;
+      border: 1px solid var(--cyan);
+      border-radius: 4px;
+      color: var(--cyan) !important;
+      font-size: 0.8rem;
+      transition: background 0.2s, color 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--cyan) !important; color: var(--navy) !important; }
+    .nav-cta::after { display: none !important; }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 6rem 3rem 4rem;
+      gap: 5rem;
+    }
+    .hero-text { flex: 1; max-width: 580px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.3rem 0.8rem;
+      background: rgba(0, 229, 255, 0.08);
+      border: 1px solid rgba(0, 229, 255, 0.25);
+      border-radius: 100px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--cyan);
+      margin-bottom: 1.5rem;
+    }
+    .hero-badge .dot {
+      width: 7px; height: 7px;
+      background: var(--cyan);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
+    .hero-name {
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+    .hero-name .accent { color: var(--cyan); }
+    .hero-role {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+    .hero-role .typed-cursor { color: var(--cyan); animation: blink 1s infinite; }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 2.5rem;
+      max-width: 500px;
+    }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.8rem 1.8rem;
+      background: var(--cyan);
+      color: var(--navy);
+      border: none; border-radius: 6px;
+      font-family: var(--font-main);
+      font-weight: 600; font-size: 0.9rem;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+      cursor: none;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0, 229, 255, 0.35);
+      background: #33eaff;
+    }
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.8rem 1.8rem;
+      background: transparent;
+      color: var(--white);
+      border: 1px solid var(--navy-border);
+      border-radius: 6px;
+      font-family: var(--font-main);
+      font-weight: 500; font-size: 0.9rem;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s, transform 0.2s;
+      cursor: none;
+    }
+    .btn-outline:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+      transform: translateY(-2px);
+    }
+
+    /* ─── Hero photo ─── */
+    .hero-visual { flex-shrink: 0; position: relative; }
+    .avatar-container {
+      position: relative;
+      width: 320px; height: 360px;
+    }
+    .avatar-glow {
+      position: absolute; inset: -24px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(0,229,255,0.18) 0%, transparent 70%);
+      animation: glow-pulse 3s ease-in-out infinite;
+    }
+    @keyframes glow-pulse {
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.06); }
+    }
+    .avatar-ring {
+      position: absolute; inset: -12px;
+      border-radius: 24px;
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      animation: ring-rotate 12s linear infinite;
+    }
+    .avatar-ring::before {
+      content: '';
+      position: absolute; top: -4px; left: 50%;
+      width: 8px; height: 8px;
+      background: var(--cyan);
+      border-radius: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 0 12px var(--cyan);
+    }
+    @keyframes ring-rotate { to { transform: rotate(360deg); } }
+    .avatar-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      border-radius: 20px;
+      filter: saturate(1.1) contrast(1.05);
+      position: relative; z-index: 1;
+    }
+    .avatar-stats {
+      position: absolute;
+      bottom: -20px; right: -32px;
+      background: var(--navy-card);
+      border: 1px solid var(--navy-border);
+      border-radius: 12px;
+      padding: 0.8rem 1rem;
+      z-index: 2;
+    }
+    .avatar-stats .stat-val {
+      font-size: 1.4rem; font-weight: 700;
+      color: var(--cyan);
+      font-family: var(--font-mono);
+    }
+    .avatar-stats .stat-label {
+      font-size: 0.7rem; color: var(--muted);
+      margin-top: 2px;
+    }
+    .avatar-badge {
+      position: absolute;
+      top: -16px; left: -32px;
+      background: var(--navy-card);
+      border: 1px solid rgba(124, 58, 237, 0.4);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      z-index: 2;
+      animation: float-y 4s ease-in-out infinite;
+    }
+    @keyframes float-y {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .avatar-badge .badge-emoji { font-size: 1.2rem; }
+    .avatar-badge .badge-text { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+
+    /* ─── ABOUT ─── */
+    section { padding: 6rem 3rem; }
+    .section-tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--cyan);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .section-title .accent { color: var(--cyan); }
+    .container { max-width: 1200px; margin: 0 auto; }
+
+    /* ─── SKILLS ─── */
+    #skills { background: rgba(10, 22, 40, 0.5); }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .skill-card {
+      background: var(--navy-card);
+      border: 1px solid var(--navy-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .skill-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--cyan), var(--purple));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .skill-card:hover::before { transform: scaleX(1); }
+    .skill-card:hover {
+      border-color: rgba(0, 229, 255, 0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+    }
+    .skill-icon {
+      width: 44px; height: 44px;
+      background: rgba(0, 229, 255, 0.08);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1rem;
+      font-size: 1.3rem;
+    }
+    .skill-name { font-weight: 600; margin-bottom: 0.4rem; }
+    .skill-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
+    .tag {
+      padding: 0.2rem 0.6rem;
+      background: rgba(0, 229, 255, 0.06);
+      border: 1px solid rgba(0, 229, 255, 0.15);
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--cyan);
+    }
+
+    /* ─── EXPERIENCE (timeline) ─── */
+    .timeline { margin-top: 3rem; position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--cyan), var(--purple), transparent);
+    }
+    .tl-item {
+      position: relative;
+      margin-bottom: 2.5rem;
+      padding-left: 2rem;
+    }
+    .tl-item::before {
+      content: '';
+      position: absolute; left: -6px; top: 6px;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--navy);
+      border: 2px solid var(--cyan);
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+    }
+    .tl-item.current::before { background: var(--cyan); }
+    .tl-company {
+      font-weight: 600; font-size: 1rem;
+      color: var(--white);
+    }
+    .tl-role {
+      font-size: 0.85rem; color: var(--cyan);
+      font-family: var(--font-mono);
+      margin: 0.2rem 0;
+    }
+    .tl-period {
+      font-size: 0.75rem; color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+    .tl-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
+
+    /* ─── 3D TECH SPHERE ─── */
+    #tech-sphere-section {
+      text-align: center;
+      background: linear-gradient(180deg, var(--navy) 0%, rgba(10,22,40,0.8) 50%, var(--navy) 100%);
+    }
+    #tech-sphere-section p { color: var(--muted); margin-top: 0.75rem; margin-bottom: 2rem; }
+    #sphere-wrapper {
+      width: 480px; height: 480px;
+      margin: 0 auto;
+      position: relative;
+    }
+    #tech-sphere-canvas {
+      width: 100%; height: 100%;
+      cursor: grab;
+    }
+    #tech-sphere-canvas:active { cursor: grabbing; }
+    .sphere-hint {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 1rem;
+    }
+
+    /* ─── CONTACT ─── */
+    #contact { text-align: center; }
+    .contact-card {
+      max-width: 620px;
+      margin: 3rem auto 0;
+      background: var(--navy-card);
+      border: 1px solid var(--navy-border);
+      border-radius: 24px;
+      padding: 3rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--cyan), var(--purple));
+    }
+    .contact-card p { color: var(--muted); line-height: 1.75; margin-bottom: 2rem; }
+    .contact-links {
+      display: flex; gap: 1rem;
+      justify-content: center; flex-wrap: wrap;
+      margin-top: 1.5rem;
+    }
+    .contact-link {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      border: 1px solid var(--navy-border);
+      border-radius: 8px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: border-color 0.2s, color 0.2s, transform 0.2s;
+    }
+    .contact-link:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+      transform: translateY(-2px);
+    }
+    .contact-link svg { width: 16px; height: 16px; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      text-align: center;
+      padding: 2rem 3rem;
+      border-top: 1px solid var(--navy-border);
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-family: var(--font-mono);
+    }
+    footer span { color: var(--cyan); }
+
+    /* ─── Scroll reveal ─── */
+    .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 900px) {
+      #hero { flex-direction: column; align-items: flex-start; gap: 3rem; padding: 7rem 1.5rem 4rem; }
+      .hero-visual { align-self: center; }
+      nav { padding: 1rem 1.5rem; }
+      section { padding: 4rem 1.5rem; }
+      .avatar-container { width: 260px; height: 300px; }
+      #sphere-wrapper { width: 320px; height: 320px; }
+    }
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .hero-name { font-size: 2rem; }
+    }
+
+    /* ─── Noise texture overlay ─── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+  </style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav id="navbar">
-    <div class="nav-inner">
-      <span class="nav-logo"><i class="fas fa-laptop-code"></i></span>
+  <!-- Cursors -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- Backgrounds -->
+  <canvas id="bg-canvas"></canvas>
+  <canvas id="three-canvas"></canvas>
+
+  <div class="page">
+
+    <!-- NAV -->
+    <nav id="nav">
+      <div class="nav-logo">&lt;<span>RSR</span>/&gt;</div>
       <ul class="nav-links">
-        <li><a href="#sobre">Sobre</a></li>
-        <li><a href="#experiencia">Experiência</a></li>
-        <li><a href="#formacao">Formação</a></li>
+        <li><a href="#about">Sobre</a></li>
         <li><a href="#skills">Skills</a></li>
-        <li><a href="#contato">Contato</a></li>
+        <li><a href="#experience">Experiência</a></li>
+        <li><a href="#tech-sphere-section">Tech Stack</a></li>
+        <li><a href="#contact" class="nav-cta">Contratar</a></li>
       </ul>
-      <button class="hamburger" id="hamburger" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-    <ul class="nav-mobile" id="nav-mobile">
-      <li><a href="#sobre">Sobre</a></li>
-      <li><a href="#experiencia">Experiência</a></li>
-      <li><a href="#formacao">Formação</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#contato">Contato</a></li>
-    </ul>
-  </nav>
+    </nav>
 
-  <!-- HERO -->
-  <section id="hero">
-    <div class="hero-content">
-      <p class="hero-greeting">Olá, me chamo</p>
-      <h1 class="hero-name">Rogério Salomão<br /><span>Ribeiro</span></h1>
-      <p class="hero-title">.NET Developer</p>
-      <p class="hero-sub">
-        Desenvolvedor back-end com mais de 10 anos de experiência em C#, .NET Core e SQL Server, atuando em fintechs e empresas de grande porte.
-      </p>
-      <div class="hero-btns">
-        <a href="#contato" class="btn btn-primary">Entrar em contato</a>
-        <a href="#experiencia" class="btn btn-outline">Ver experiência</a>
+    <!-- HERO -->
+    <section id="hero">
+      <div class="hero-text reveal">
+        <div class="hero-badge">
+          <span class="dot"></span>
+          Disponível para freelas
+        </div>
+        <h1 class="hero-name">
+          Rogério<br/>
+          Salomão <span class="accent">Ribeiro</span>
+        </h1>
+        <p class="hero-role">
+          <span id="typed"></span><span class="typed-cursor">|</span>
+        </p>
+        <p class="hero-desc">
+          Desenvolvedor .NET Pleno com +10 anos de experiência em back-end,
+          microserviços, APIs REST e integração com sistemas financeiros.
+          Transformo requisitos complexos em soluções robustas e escaláveis.
+        </p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            Fale comigo
+          </a>
+          <a href="https://www.linkedin.com/in/rog%C3%A9rio-salom%C3%A3o-ribeiro-033597168/" target="_blank" rel="noopener" class="btn-outline">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+            LinkedIn
+          </a>
+        </div>
       </div>
-      <div class="hero-socials">
-        <a href="https://www.linkedin.com/in/rog%C3%A9rio-salom%C3%A3o-ribeiro-033597168/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-        <a href="https://github.com/rribeiro-30" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
-        <a href="mailto:rogerio_1034@hotmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
-      </div>
-    </div>
-    <div class="hero-visual">
-      <div class="avatar-ring">
-        <img src="foto.jpeg" alt="Rogério Salomão Ribeiro" class="avatar-photo" />
-      </div>
-      <div class="floating-badge badge-1"><i class="fab fa-microsoft"></i> .NET Core</div>
-      <div class="floating-badge badge-2"><i class="fas fa-database"></i> SQL Server</div>
-      <div class="floating-badge badge-3"><i class="fas fa-plug"></i> APIs REST</div>
-    </div>
-  </section>
 
-  <!-- SOBRE -->
-  <section id="sobre" class="section">
-    <div class="container">
-      <h2 class="section-title">Sobre mim</h2>
-      <div class="sobre-grid">
-        <div class="sobre-text reveal">
+      <div class="hero-visual reveal">
+        <div class="avatar-container">
+          <div class="avatar-glow"></div>
+          <div class="avatar-ring"></div>
+          <div class="avatar-badge">
+            <div class="badge-emoji">⚡</div>
+            <div class="badge-text">10+ anos exp.</div>
+          </div>
+          <img
+            src="avatar.jpg"
+            alt="Rogério Salomão Ribeiro"
+            class="avatar-img"
+          />
+          <div class="avatar-stats">
+            <div class="stat-val">+10</div>
+            <div class="stat-label">Anos de código</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="container">
+        <div class="reveal">
+          <p class="section-tag">// sobre mim</p>
+          <h2 class="section-title">Back-end é minha <span class="accent">especialidade</span></h2>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:3rem; margin-top:2rem;" class="reveal">
+          <div>
+            <p style="color:var(--muted);line-height:1.8;margin-bottom:1rem;">
+              Tecnólogo em Análise e Desenvolvimento de Sistemas pela UniABC,
+              comecei minha trajetória em 2015 e desde então trabalhei em empresas
+              de destaque nos setores financeiro e energético.
+            </p>
+            <p style="color:var(--muted);line-height:1.8;">
+              Tenho experiência sólida com C#, .NET Core, microserviços,
+              mensageria (RabbitMQ, Kafka), monitoramento (Dynatrace, Grafana)
+              e bancos SQL Server / MySQL.
+            </p>
+          </div>
+          <div>
+            <p style="color:var(--muted);line-height:1.8;margin-bottom:1rem;">
+              Atualmente atuo como Desenvolvedor .NET Pleno na AVITA, desenvolvendo
+              microserviços de integração com seguradoras e APIs de alta disponibilidade.
+            </p>
+            <p style="color:var(--muted);line-height:1.8;">
+              Busco projetos de freela nos quais possa agregar valor com
+              desenvolvimento robusto, integrações de APIs e soluções de back-end
+              que realmente funcionam.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills">
+      <div class="container">
+        <div class="reveal">
+          <p class="section-tag">// stack técnica</p>
+          <h2 class="section-title">O que eu <span class="accent">domino</span></h2>
+        </div>
+        <div class="skills-grid">
+
+          <div class="skill-card reveal">
+            <div class="skill-icon">🔷</div>
+            <div class="skill-name">Back-end .NET</div>
+            <div class="skill-desc">Desenvolvimento de APIs, microserviços e sistemas de alta carga usando C# e .NET Core.</div>
+            <div class="skill-tags">
+              <span class="tag">C#</span>
+              <span class="tag">.NET Core</span>
+              <span class="tag">.NET MVC</span>
+              <span class="tag">ASP.NET</span>
+            </div>
+          </div>
+
+          <div class="skill-card reveal">
+            <div class="skill-icon">🗄️</div>
+            <div class="skill-name">Banco de Dados</div>
+            <div class="skill-desc">Queries complexas, stored procedures, otimização e modelagem com SQL Server e MySQL.</div>
+            <div class="skill-tags">
+              <span class="tag">SQL Server</span>
+              <span class="tag">MySQL</span>
+              <span class="tag">Dapper</span>
+              <span class="tag">Procedures</span>
+            </div>
+          </div>
+
+          <div class="skill-card reveal">
+            <div class="skill-icon">🔗</div>
+            <div class="skill-name">Integrações & APIs</div>
+            <div class="skill-desc">Integração com sistemas externos, seguradoras, gateways bancários e APIs de terceiros.</div>
+            <div class="skill-tags">
+              <span class="tag">REST API</span>
+              <span class="tag">Web Services</span>
+              <span class="tag">Seguradoras</span>
+            </div>
+          </div>
+
+          <div class="skill-card reveal">
+            <div class="skill-icon">📨</div>
+            <div class="skill-name">Mensageria</div>
+            <div class="skill-desc">Arquitetura orientada a eventos com filas e streams para sistemas resilientes.</div>
+            <div class="skill-tags">
+              <span class="tag">RabbitMQ</span>
+              <span class="tag">AmazonMQ</span>
+              <span class="tag">Kafka</span>
+            </div>
+          </div>
+
+          <div class="skill-card reveal">
+            <div class="skill-icon">📊</div>
+            <div class="skill-name">Monitoramento & SRE</div>
+            <div class="skill-desc">Observabilidade, análise de incidentes e deploy em ambientes de produção críticos.</div>
+            <div class="skill-tags">
+              <span class="tag">Dynatrace</span>
+              <span class="tag">Grafana</span>
+              <span class="tag">Rancher</span>
+            </div>
+          </div>
+
+          <div class="skill-card reveal">
+            <div class="skill-icon">⚙️</div>
+            <div class="skill-name">DevOps & CI/CD</div>
+            <div class="skill-desc">Pipelines de entrega, controle de versão e automação de deploys em ambientes ágeis.</div>
+            <div class="skill-tags">
+              <span class="tag">GitHub</span>
+              <span class="tag">GoCD</span>
+              <span class="tag">Jenkins</span>
+              <span class="tag">Scrum</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience">
+      <div class="container">
+        <div class="reveal">
+          <p class="section-tag">// trajetória</p>
+          <h2 class="section-title">Onde já <span class="accent">atuei</span></h2>
+        </div>
+        <div class="timeline reveal">
+
+          <div class="tl-item current">
+            <div class="tl-company">AVITA</div>
+            <div class="tl-role">Desenvolvedor .NET Pleno</div>
+            <div class="tl-period">Nov 2024 – Atual</div>
+            <div class="tl-desc">Microserviços de integração com seguradoras, APIs em .NET Core e MySQL com Dapper.</div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-company">Delta Energia</div>
+            <div class="tl-role">Desenvolvedor .NET Pleno</div>
+            <div class="tl-period">Mar 2023 – Out 2024</div>
+            <div class="tl-desc">Sistema de gestão da empresa, APIs .NET Core e SQL Server.</div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-company">NEON Pagamentos</div>
+            <div class="tl-role">Desenvolvedor SRE Pleno</div>
+            <div class="tl-period">Jun 2022 – Fev 2023</div>
+            <div class="tl-desc">Sustentação da squad de Empréstimo Pessoal, monitoramento via Dynatrace, Kafka, RabbitMQ.</div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-company">Banco Alfa de Investimentos</div>
+            <div class="tl-role">Desenvolvedor .NET Pleno</div>
+            <div class="tl-period">Nov 2021 – Jun 2022</div>
+            <div class="tl-desc">APIs .NET Core e soluções para sistemas financeiros internos.</div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-company">Interplayers</div>
+            <div class="tl-role">Especialista de Sistemas I</div>
+            <div class="tl-period">Abr 2021 – Nov 2021</div>
+            <div class="tl-desc">APIs para consumo via Front End em C# .NET MVC e Core.</div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-company">Best.Projects / Verity Group / MJDS / Guard</div>
+            <div class="tl-role">Programador .NET Jr → Pleno</div>
+            <div class="tl-period">2015 – 2021</div>
+            <div class="tl-desc">Crescimento de auxiliar a pleno: Delphi, .NET MVC, arquivos bancários, Banco Carrefour.</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 3D TECH SPHERE -->
+    <section id="tech-sphere-section">
+      <div class="container">
+        <div class="reveal">
+          <p class="section-tag">// visualização interativa</p>
+          <h2 class="section-title">Tech <span class="accent">Stack</span> 3D</h2>
+          <p>Arraste para rotacionar • Scroll para zoom</p>
+        </div>
+        <div id="sphere-wrapper" class="reveal">
+          <canvas id="tech-sphere-canvas"></canvas>
+        </div>
+        <p class="sphere-hint reveal">// tecnologias em órbita — hover para destacar</p>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <div class="container">
+        <div class="reveal">
+          <p class="section-tag">// vamos trabalhar juntos</p>
+          <h2 class="section-title">Pronto para o seu <span class="accent">projeto</span></h2>
+        </div>
+        <div class="contact-card reveal">
           <p>
-            Desenvolvedor .NET com mais de 10 anos de experiência, atuando em empresas dos setores financeiro, energia e seguros. Tenho expertise em C#, ASP.NET Core e SQL Server, com vivência em microserviços, integração de APIs e sustentação de sistemas críticos.
+            Precisa de um desenvolvedor back-end experiente para seu projeto?
+            Tenho disponibilidade para freelas de API, microserviços, integrações
+            e sistemas financeiros. Vamos conversar!
           </p>
-          <p>
-            Ao longo da carreira trabalhei em empresas como NEON Pagamentos, Banco Alfa de Investimentos, Delta Energia e AVITA, sempre com foco em qualidade de código, performance e entregas ágeis.
-          </p>
-          <p>
-            Tenho facilidade em analisar e resolver problemas em ambientes produtivos, desenvolvimento de novas funcionalidades e integração com sistemas legados e modernos.
-          </p>
-        </div>
-        <div class="sobre-stats reveal">
-          <div class="stat-card">
-            <span class="stat-num" data-target="10">0<span class="plus">+</span></span>
-            <span class="stat-label">Anos de experiência</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-num" data-target="9">0<span class="plus">+</span></span>
-            <span class="stat-label">Empresas</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-num" data-target="12">0<span class="plus">+</span></span>
-            <span class="stat-label">Tecnologias</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-num" data-target="3">0<span class="plus">+</span></span>
-            <span class="stat-label">Setores de atuação</span>
+          <a href="mailto:rogerio_1034@hotmail.com" class="btn-primary" style="display:inline-flex;margin-bottom:1rem;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,12 2,6"></polyline></svg>
+            rogerio_1034@hotmail.com
+          </a>
+          <div class="contact-links">
+            <a href="tel:+5511940075097" class="contact-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.16 6.16l1.79-1.79a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              (11) 94007-5097
+            </a>
+            <a href="https://www.linkedin.com/in/rog%C3%A9rio-salom%C3%A3o-ribeiro-033597168/" target="_blank" rel="noopener" class="contact-link">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+              LinkedIn
+            </a>
+            <a href="https://github.com/rribeiro-30" target="_blank" rel="noopener" class="contact-link">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+              GitHub
+            </a>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- EXPERIÊNCIA -->
-  <section id="experiencia" class="section section-dark">
-    <div class="container">
-      <h2 class="section-title">Experiência</h2>
-      <div class="timeline">
+    <footer>
+      <span>&lt;RSR/&gt;</span> · Rogério Salomão Ribeiro · São Paulo, SP · 2025
+    </footer>
 
-        <div class="timeline-item reveal">
-          <div class="timeline-dot"></div>
-          <div class="timeline-card">
-            <div class="timeline-header">
-              <div>
-                <h3>Desenvolvedor .NET Pleno</h3>
-                <span class="company">AVITA</span>
-              </div>
-              <span class="period">Nov 2024 – Atual</span>
-            </div>
-            <p>Desenvolvimento de microserviços para integração com seguradoras e APIs em .NET Core. Criação de scripts e procedures em MySQL com Dapper, atuando em ciclos ágeis com daily e sprint planning.</p>
-            <div class="tags">
-              <span>C#</span><span>.NET Core</span><span>Microserviços</span><span>MySQL</span><span>Dapper</span><span>APIs REST</span>
-            </div>
-          </div>
-        </div>
+  </div><!-- .page -->
 
-        <div class="timeline-item reveal">
-          <div class="timeline-dot"></div>
-          <div class="timeline-card">
-            <div class="timeline-header">
-              <div>
-                <h3>Desenvolvedor .NET Pleno</h3>
-                <span class="company">Delta Energia</span>
-              </div>
-              <span class="period">Mar 2023 – Out 2024</span>
-            </div>
-            <p>Desenvolvimento e manutenção do sistema de gestão da empresa, resolução de bugs e criação de APIs em .NET Core. Gestão de banco de dados com SQL Server e Dapper, entregas em metodologia ágil.</p>
-            <div class="tags">
-              <span>C#</span><span>.NET Core</span><span>.NET MVC</span><span>SQL Server</span><span>Dapper</span><span>APIs REST</span>
-            </div>
-          </div>
-        </div>
+  <!-- ═══════════════════════════════════════════ SCRIPTS ═══════════════════════════════════════════ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+  // ─────────────────────────────────────────────────────────────────
+  // 1. CUSTOM CURSOR
+  // ─────────────────────────────────────────────────────────────────
+  const dot  = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0;
 
-        <div class="timeline-item reveal">
-          <div class="timeline-dot"></div>
-          <div class="timeline-card">
-            <div class="timeline-header">
-              <div>
-                <h3>Desenvolvedor SRE Pleno</h3>
-                <span class="company">NEON Pagamentos</span>
-              </div>
-              <span class="period">Jun 2022 – Fev 2023</span>
-            </div>
-            <p>Apoio às squads de Empréstimo Pessoal com foco em sustentabilidade. Análise de incidentes, monitoração via Dynatrace, deploy de aplicações e desenvolvimento de novas funcionalidades em ambiente de alta escala.</p>
-            <div class="tags">
-              <span>C#</span><span>.NET Core</span><span>RabbitMQ</span><span>Kafka</span><span>Dynatrace</span><span>Jenkins</span><span>Grafana</span>
-            </div>
-          </div>
-        </div>
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left  = mx + 'px';
+    dot.style.top   = my + 'px';
+    ring.style.left = mx + 'px';
+    ring.style.top  = my + 'px';
+  });
 
-        <div class="timeline-item reveal">
-          <div class="timeline-dot"></div>
-          <div class="timeline-card">
-            <div class="timeline-header">
-              <div>
-                <h3>Desenvolvedor .NET Pleno</h3>
-                <span class="company">Banco Alfa de Investimentos</span>
-              </div>
-              <span class="period">Nov 2021 – Mai 2022</span>
-            </div>
-            <p>Criação de novas funcionalidades e resolução de problemas nos sistemas do banco. Desenvolvimento de APIs em .NET Core e gestão de banco de dados SQL Server.</p>
-            <div class="tags">
-              <span>C#</span><span>.NET Core</span><span>ASP Clássico</span><span>SQL Server</span><span>APIs REST</span>
-            </div>
-          </div>
-        </div>
+  document.querySelectorAll('a, button, .skill-card').forEach(el => {
+    el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+    el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+  });
 
-        <div class="timeline-item reveal">
-          <div class="timeline-dot"></div>
-          <div class="timeline-card">
-            <div class="timeline-header">
-              <div>
-                <h3>Especialista de Sistemas I</h3>
-                <span class="company">Interplayers</span>
-              </div>
-              <span class="period">Abr 2021 – Nov 2021</span>
-            </div>
-            <p>Desenvolvimento de funcionalidades e APIs para consumo via Front End. Análise e resolução de problemas utilizando C# .NET Core e SQL Server.</p>
-            <div class="tags">
-              <span>C#</span><span>.NET Core</span><span>.NET MVC</span><span>SQL Server</span><span>APIs REST</span>
-            </div>
-          </div>
-        </div>
+  // ─────────────────────────────────────────────────────────────────
+  // 2. ANTIGRAVITY PARTICLE BG
+  // ─────────────────────────────────────────────────────────────────
+  (function () {
+    const canvas = document.getElementById('bg-canvas');
+    const ctx    = canvas.getContext('2d');
+    let W, H, particles = [];
+    const COLORS = ['#00e5ff', '#7c3aed', '#00b8d9', '#5b21b6', '#33eaff'];
 
-        <div class="timeline-item reveal">
-          <div class="timeline-dot timeline-dot-sm"></div>
-          <div class="timeline-card timeline-card-compact">
-            <div class="timeline-header">
-              <div>
-                <h3>Programador .NET Pleno</h3>
-                <span class="company">Best.Projects</span>
-              </div>
-              <span class="period">Out 2020 – Abr 2021</span>
-            </div>
-            <p>Geração e leitura de arquivos bancários, web services e resolução de problemas em produção. C# .NET MVC + SQL Server.</p>
-          </div>
-        </div>
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
 
-        <div class="timeline-item reveal">
-          <div class="timeline-dot timeline-dot-sm"></div>
-          <div class="timeline-card timeline-card-compact">
-            <div class="timeline-header">
-              <div>
-                <h3>Programador .NET Júnior</h3>
-                <span class="company">Verity Group</span>
-              </div>
-              <span class="period">Mai 2018 – Set 2020</span>
-            </div>
-            <p>Manutenção e implementação de soluções para sistema do Banco Carrefour. C# .NET MVC + SQL Server.</p>
-          </div>
-        </div>
+    class Particle {
+      constructor() { this.reset(); }
+      reset() {
+        this.x  = Math.random() * W;
+        this.y  = H + Math.random() * 50;
+        this.r  = Math.random() * 2.2 + 0.4;
+        this.vy = -(Math.random() * 0.6 + 0.15);
+        this.vx = (Math.random() - 0.5) * 0.3;
+        this.alpha = Math.random() * 0.6 + 0.15;
+        this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+        this.waveAmp   = Math.random() * 0.5 + 0.1;
+        this.waveFreq  = Math.random() * 0.01 + 0.003;
+        this.wavePhase = Math.random() * Math.PI * 2;
+        this.t = 0;
+      }
+      update() {
+        this.t++;
+        this.x += this.vx + Math.sin(this.t * this.waveFreq + this.wavePhase) * this.waveAmp;
+        this.y += this.vy;
+        if (this.y < -10) this.reset();
+      }
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.fillStyle   = this.color;
+        ctx.shadowColor = this.color;
+        ctx.shadowBlur  = 8;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
 
-        <div class="timeline-item reveal">
-          <div class="timeline-dot timeline-dot-sm"></div>
-          <div class="timeline-card timeline-card-compact">
-            <div class="timeline-header">
-              <div>
-                <h3>Programador Delphi/.NET Júnior</h3>
-                <span class="company">MJDS Assessoria e Processamento de Dados</span>
-              </div>
-              <span class="period">Set 2016 – Mai 2018</span>
-            </div>
-            <p>Manutenção de sistema de Previdência Privada com Delphi e C# .NET MVC.</p>
-          </div>
-        </div>
+    function init() {
+      resize();
+      particles = Array.from({ length: 220 }, () => {
+        const p = new Particle();
+        p.y = Math.random() * H; // spread on load
+        return p;
+      });
+    }
 
-        <div class="timeline-item reveal">
-          <div class="timeline-dot timeline-dot-sm"></div>
-          <div class="timeline-card timeline-card-compact">
-            <div class="timeline-header">
-              <div>
-                <h3>Auxiliar de Programação</h3>
-                <span class="company">Guard Informática</span>
-              </div>
-              <span class="period">Abr 2015 – Mai 2016</span>
-            </div>
-            <p>Desenvolvimento de sistema em Delphi XE6, migração de xHarbour e automação comercial com PostgreSQL.</p>
-          </div>
-        </div>
+    function loop() {
+      ctx.clearRect(0, 0, W, H);
+      particles.forEach(p => { p.update(); p.draw(); });
+      requestAnimationFrame(loop);
+    }
 
-      </div>
-    </div>
-  </section>
+    window.addEventListener('resize', resize);
+    init(); loop();
+  })();
 
-  <!-- FORMAÇÃO -->
-  <section id="formacao" class="section">
-    <div class="container">
-      <h2 class="section-title">Formação</h2>
-      <div class="edu-grid">
-        <div class="edu-card reveal">
-          <div class="edu-icon"><i class="fas fa-graduation-cap"></i></div>
-          <div class="edu-info">
-            <h3>Tecnólogo em Análise e Desenvolvimento de Sistemas</h3>
-            <span class="edu-school">Universidade do Grande ABC – UniABC</span>
-            <span class="edu-period">Concluído em Jun 2015</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  // ─────────────────────────────────────────────────────────────────
+  // 3. THREE.JS — FLOATING GEOMETRIC MESH BACKGROUND
+  // ─────────────────────────────────────────────────────────────────
+  (function () {
+    const canvas   = document.getElementById('three-canvas');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.setSize(innerWidth, innerHeight);
 
-  <!-- SKILLS -->
-  <section id="skills" class="section section-dark">
-    <div class="container">
-      <h2 class="section-title">Skills</h2>
-      <div class="skills-grid">
+    const scene  = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 100);
+    camera.position.set(0, 0, 5);
 
-        <div class="skill-group reveal">
-          <h3><i class="fas fa-code"></i> Back-end</h3>
-          <div class="skill-list">
-            <div class="skill-item">
-              <span>C# / .NET Core</span>
-              <div class="skill-bar"><div class="skill-fill" data-width="95"></div></div>
-            </div>
-            <div class="skill-item">
-              <span>ASP.NET MVC / Core</span>
-              <div class="skill-bar"><div class="skill-fill" data-width="92"></div></div>
-            </div>
-            <div class="skill-item">
-              <span>APIs RESTful</span>
-              <div class="skill-bar"><div class="skill-fill" data-width="92"></div></div>
-            </div>
-            <div class="skill-item">
-              <span>Dapper</span>
-              <div class="skill-bar"><div class="skill-fill" data-width="85"></div></div>
-            </div>
-          </div>
-        </div>
+    // Wireframe icosahedra orbiting slowly
+    const geoms = [
+      new THREE.IcosahedronGeometry(1.4, 1),
+      new THREE.OctahedronGeometry(0.9, 0),
+      new THREE.TorusGeometry(0.7, 0.25, 10, 40),
+    ];
+    const mats = geoms.map((_, i) => new THREE.MeshBasicMaterial({
+      color: i === 0 ? 0x00e5ff : i === 1 ? 0x7c3aed : 0x00b8d9,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.18,
+    }));
+    const meshes = geoms.map((g, i) => {
+      const m = new THREE.Mesh(g, mats[i]);
+      m.position.set(
+        (i - 1) * 2.8,
+        (i % 2 === 0 ? 0.6 : -0.6),
+        -1
+      );
+      scene.add(m);
+      return m;
+    });
 
-        <div class="skill-group reveal">
-          <h3><i class="fas fa-database"></i> Banco de Dados</h3>
-          <div class="skill-list">
-            <div class="skill-item">
-              <span>SQL Server</span>
-              <div class="skill-bar"><div class="skill-fill" data-width="92"></div></div>
-            </div>
-            <div class="skill-item">
-              <span>MySQL</span>
-              <div class="skill-bar"><div class="skill-fill" data-width="78"></div></div>
-            </div>
-            <div class="skill-item">
-              <span>PostgreSQL</span>
-              <div class="skill-bar"><div class="skill-fill" data-width="65"></div></div>
-            </div>
-            <div class="skill-item">
-              <span>Stored Procedures</span>
-              <div class="skill-bar"><div class="skill-fill" data-width="88"></div></div>
-            </div>
-          </div>
-        </div>
+    // Points cloud
+    const pGeo = new THREE.BufferGeometry();
+    const pts  = [];
+    for (let i = 0; i < 600; i++) {
+      pts.push((Math.random() - 0.5) * 20, (Math.random() - 0.5) * 12, (Math.random() - 0.5) * 8 - 2);
+    }
+    pGeo.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3));
+    const pointsMesh = new THREE.Points(pGeo, new THREE.PointsMaterial({
+      color: 0x00e5ff, size: 0.025, transparent: true, opacity: 0.45,
+    }));
+    scene.add(pointsMesh);
 
-        <div class="skill-group reveal">
-          <h3><i class="fas fa-tools"></i> Ferramentas & Infra</h3>
-          <div class="skill-list">
-            <div class="skill-item">
-              <span>Git / GitHub</span>
-              <div class="skill-bar"><div class="skill-fill" data-width="88"></div></div>
-            </div>
-            <div class="skill-item">
-              <span>RabbitMQ / Kafka</span>
-              <div class="skill-bar"><div class="skill-fill" data-width="68"></div></div>
-            </div>
-            <div class="skill-item">
-              <span>Dynatrace / Grafana</span>
-              <div class="skill-bar"><div class="skill-fill" data-width="65"></div></div>
-            </div>
-            <div class="skill-item">
-              <span>Jenkins / GoCD</span>
-              <div class="skill-bar"><div class="skill-fill" data-width="60"></div></div>
-            </div>
-          </div>
-        </div>
+    let t = 0;
+    function animate() {
+      requestAnimationFrame(animate);
+      t += 0.004;
+      meshes[0].rotation.x = t * 0.5;  meshes[0].rotation.y = t * 0.3;
+      meshes[1].rotation.x = -t * 0.4; meshes[1].rotation.z = t * 0.6;
+      meshes[2].rotation.x = t * 0.3;  meshes[2].rotation.y = -t * 0.5;
+      meshes.forEach((m, i) => {
+        m.position.y = (i % 2 === 0 ? 0.6 : -0.6) + Math.sin(t + i) * 0.25;
+      });
+      pointsMesh.rotation.y = t * 0.06;
+      renderer.render(scene, camera);
+    }
+    animate();
 
-        <div class="skill-group reveal">
-          <h3><i class="fas fa-layer-group"></i> Práticas</h3>
-          <div class="skill-list">
-            <div class="skill-item">
-              <span>Microserviços</span>
-              <div class="skill-bar"><div class="skill-fill" data-width="80"></div></div>
-            </div>
-            <div class="skill-item">
-              <span>Metodologia Ágil (Scrum)</span>
-              <div class="skill-bar"><div class="skill-fill" data-width="90"></div></div>
-            </div>
-            <div class="skill-item">
-              <span>Análise e Resolução de Bugs</span>
-              <div class="skill-bar"><div class="skill-fill" data-width="92"></div></div>
-            </div>
-            <div class="skill-item">
-              <span>Integração de Sistemas</span>
-              <div class="skill-bar"><div class="skill-fill" data-width="85"></div></div>
-            </div>
-          </div>
-        </div>
+    window.addEventListener('resize', () => {
+      camera.aspect = innerWidth / innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+    });
+  })();
 
-      </div>
-    </div>
-  </section>
+  // ─────────────────────────────────────────────────────────────────
+  // 4. INTERACTIVE 3D TECH SPHERE
+  // ─────────────────────────────────────────────────────────────────
+  (function () {
+    const canvas   = document.getElementById('tech-sphere-canvas');
+    const wrapper  = document.getElementById('sphere-wrapper');
+    const W = () => wrapper.clientWidth;
+    const H = () => wrapper.clientHeight;
 
-  <!-- CONTATO -->
-  <section id="contato" class="section">
-    <div class="container">
-      <h2 class="section-title">Contato</h2>
-      <p class="contato-sub reveal">Aberto a novas oportunidades — vamos conversar!</p>
-      <div class="contato-grid">
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.setSize(W(), H());
 
-        <a href="mailto:rogerio_1034@hotmail.com" class="contato-card reveal">
-          <i class="fas fa-envelope"></i>
-          <span>rogerio_1034@hotmail.com</span>
-        </a>
+    const scene  = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(55, W() / H(), 0.1, 100);
+    camera.position.set(0, 0, 6.5);
 
-        <a href="https://www.linkedin.com/in/rog%C3%A9rio-salom%C3%A3o-ribeiro-033597168/" target="_blank" class="contato-card reveal">
-          <i class="fab fa-linkedin"></i>
-          <span>LinkedIn</span>
-        </a>
+    // Ambient + point lights
+    scene.add(new THREE.AmbientLight(0x00e5ff, 0.12));
+    const pl = new THREE.PointLight(0x00e5ff, 2, 20);
+    pl.position.set(3, 3, 3);
+    scene.add(pl);
+    const pl2 = new THREE.PointLight(0x7c3aed, 1.5, 20);
+    pl2.position.set(-3, -2, 2);
+    scene.add(pl2);
 
-        <a href="https://github.com/rribeiro-30" target="_blank" class="contato-card reveal">
-          <i class="fab fa-github"></i>
-          <span>GitHub</span>
-        </a>
+    // Central glowing sphere
+    const coreGeo  = new THREE.IcosahedronGeometry(1, 4);
+    const coreMat  = new THREE.MeshPhongMaterial({
+      color: 0x0a1628,
+      emissive: 0x00e5ff,
+      emissiveIntensity: 0.12,
+      wireframe: false,
+      transparent: true,
+      opacity: 0.85,
+    });
+    const core = new THREE.Mesh(coreGeo, coreMat);
+    scene.add(core);
 
-        <a href="tel:+5511940075097" class="contato-card reveal">
-          <i class="fas fa-phone"></i>
-          <span>(11) 94007-5097</span>
-        </a>
+    // Wire shell
+    const shellGeo = new THREE.IcosahedronGeometry(1.05, 2);
+    const shellMat = new THREE.MeshBasicMaterial({ color: 0x00e5ff, wireframe: true, transparent: true, opacity: 0.12 });
+    scene.add(new THREE.Mesh(shellGeo, shellMat));
 
-      </div>
-    </div>
-  </section>
+    // Tech labels as sprites distributed on a sphere
+    const techs = [
+      'C#', '.NET Core', 'ASP.NET', 'SQL Server', 'MySQL', 'Dapper',
+      'RabbitMQ', 'Kafka', 'REST API', 'Microservices', 'Dynatrace',
+      'Grafana', 'Rancher', 'Jenkins', 'GitHub', 'Scrum', 'AWS',
+      'MVC', '.NET MVC', 'GoCD'
+    ];
 
-  <!-- FOOTER -->
-  <footer>
-    <p>Desenvolvido por <strong>Rogério Salomão Ribeiro</strong> · 2025</p>
-  </footer>
+    function makeLabelCanvas(text, highlight) {
+      const c = document.createElement('canvas');
+      c.width = 256; c.height = 80;
+      const cx = c.getContext('2d');
+      cx.clearRect(0, 0, 256, 80);
+      // bg pill
+      cx.fillStyle = highlight ? 'rgba(0,229,255,0.22)' : 'rgba(13,31,60,0.85)';
+      cx.strokeStyle = highlight ? '#00e5ff' : 'rgba(0,229,255,0.35)';
+      cx.lineWidth = 2;
+      cx.beginPath();
+      cx.roundRect(4, 14, 248, 52, 12);
+      cx.fill(); cx.stroke();
+      // text
+      cx.fillStyle = highlight ? '#00e5ff' : '#a0c4d8';
+      cx.font = 'bold 26px JetBrains Mono, monospace';
+      cx.textAlign = 'center';
+      cx.textBaseline = 'middle';
+      cx.fillText(text, 128, 40);
+      return c;
+    }
 
-  <a
-    href="https://wa.me/5511940075097?text=Ol%C3%A1%2C%20Rog%C3%A9rio!%20Vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20fazer%20uma%20cota%C3%A7%C3%A3o%20de%20freela."
-    target="_blank"
-    class="whatsapp-float"
-    aria-label="Fale pelo WhatsApp"
-  >
-    <i class="fab fa-whatsapp"></i>
-    <span class="whatsapp-tooltip">Fale comigo!</span>
-  </a>
+    const labelNodes = [];
 
-  <a href="#hero" class="back-to-top" id="back-to-top" aria-label="Voltar ao topo">
-    <i class="fas fa-chevron-up"></i>
-  </a>
+    techs.forEach((tech, i) => {
+      const phi   = Math.acos(-1 + (2 * i) / techs.length);
+      const theta = Math.sqrt(techs.length * Math.PI) * phi;
+      const r = 2.6;
+      const x = r * Math.sin(phi) * Math.cos(theta);
+      const y = r * Math.sin(phi) * Math.sin(theta);
+      const z = r * Math.cos(phi);
 
-  <script src="script.js"></script>
+      const c   = makeLabelCanvas(tech, false);
+      const tex = new THREE.CanvasTexture(c);
+      const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false });
+      const sprite = new THREE.Sprite(mat);
+      sprite.position.set(x, y, z);
+      sprite.scale.set(1.5, 0.47, 1);
+      sprite.userData = { tech, basePos: { x, y, z }, highlighted: false };
+      scene.add(sprite);
+      labelNodes.push(sprite);
+    });
+
+    // Orbit lines (rings)
+    [2.65, 2.7].forEach((r, i) => {
+      const pts = [];
+      for (let a = 0; a <= Math.PI * 2; a += 0.05) pts.push(new THREE.Vector3(Math.cos(a) * r, Math.sin(a) * r * (i === 0 ? 0.3 : -0.25), Math.sin(a) * r * (i === 0 ? 0.7 : 0.8)));
+      const geo = new THREE.BufferGeometry().setFromPoints(pts);
+      scene.add(new THREE.Line(geo, new THREE.LineBasicMaterial({ color: 0x00e5ff, transparent: true, opacity: 0.07 })));
+    });
+
+    // Drag rotation
+    let isDragging = false, prevMouse = { x: 0, y: 0 };
+    let rotX = 0, rotY = 0, velX = 0, velY = 0;
+    let zoomDist = 6.5;
+
+    canvas.addEventListener('mousedown', e => {
+      isDragging = true;
+      prevMouse = { x: e.clientX, y: e.clientY };
+    });
+    window.addEventListener('mouseup', () => { isDragging = false; });
+    window.addEventListener('mousemove', e => {
+      if (!isDragging) return;
+      const dx = e.clientX - prevMouse.x;
+      const dy = e.clientY - prevMouse.y;
+      velX = dy * 0.005;
+      velY = dx * 0.005;
+      prevMouse = { x: e.clientX, y: e.clientY };
+    });
+    canvas.addEventListener('wheel', e => {
+      zoomDist = Math.min(12, Math.max(3.5, zoomDist + e.deltaY * 0.01));
+    }, { passive: true });
+
+    // Hover highlight
+    const raycaster = new THREE.Raycaster();
+    const mouse2d   = new THREE.Vector2();
+    canvas.addEventListener('mousemove', e => {
+      const rect = canvas.getBoundingClientRect();
+      mouse2d.x =  ((e.clientX - rect.left) / rect.width)  * 2 - 1;
+      mouse2d.y = -((e.clientY - rect.top)  / rect.height) * 2 + 1;
+      raycaster.setFromCamera(mouse2d, camera);
+      const hits = raycaster.intersectObjects(labelNodes);
+      labelNodes.forEach(s => {
+        if (!s.userData.highlighted) return;
+        s.userData.highlighted = false;
+        const c = makeLabelCanvas(s.userData.tech, false);
+        s.material.map = new THREE.CanvasTexture(c);
+        s.material.map.needsUpdate = true;
+      });
+      if (hits.length > 0) {
+        const s = hits[0].object;
+        s.userData.highlighted = true;
+        const c = makeLabelCanvas(s.userData.tech, true);
+        s.material.map = new THREE.CanvasTexture(c);
+        s.material.map.needsUpdate = true;
+        canvas.style.cursor = 'pointer';
+      } else {
+        canvas.style.cursor = isDragging ? 'grabbing' : 'grab';
+      }
+    });
+
+    let t = 0;
+    function animate() {
+      requestAnimationFrame(animate);
+      t += 0.006;
+
+      if (!isDragging) {
+        velX *= 0.92;
+        velY *= 0.92;
+        rotY += 0.003;
+      }
+      rotX += velX; rotY += velY;
+
+      const group = new THREE.Quaternion()
+        .multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), rotX))
+        .multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), rotY));
+
+      core.quaternion.copy(group);
+      labelNodes.forEach((s, i) => {
+        const bp = s.userData.basePos;
+        const v  = new THREE.Vector3(bp.x, bp.y, bp.z).applyQuaternion(group);
+        s.position.copy(v);
+        const scale = s.userData.highlighted ? 1.25 : 1.0;
+        s.scale.set(1.5 * scale, 0.47 * scale, 1);
+      });
+
+      camera.position.z += (zoomDist - camera.position.z) * 0.05;
+      pl.position.set(Math.sin(t) * 4, Math.cos(t * 0.7) * 3, 3);
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+      renderer.setSize(W(), H());
+      camera.aspect = W() / H();
+      camera.updateProjectionMatrix();
+    });
+  })();
+
+  // ─────────────────────────────────────────────────────────────────
+  // 5. TYPED EFFECT
+  // ─────────────────────────────────────────────────────────────────
+  (function () {
+    const el = document.getElementById('typed');
+    const phrases = [
+      'Desenvolvedor .NET Pleno',
+      'Especialista em Back-end',
+      'Arquiteto de Microserviços',
+      'Integração de APIs & Sistemas',
+    ];
+    let pi = 0, ci = 0, deleting = false;
+    function type() {
+      const phrase = phrases[pi];
+      if (!deleting) {
+        el.textContent = phrase.slice(0, ci++);
+        if (ci > phrase.length) { deleting = true; setTimeout(type, 1800); return; }
+      } else {
+        el.textContent = phrase.slice(0, ci--);
+        if (ci < 0) { deleting = false; pi = (pi + 1) % phrases.length; ci = 0; }
+      }
+      setTimeout(type, deleting ? 45 : 80);
+    }
+    type();
+  })();
+
+  // ─────────────────────────────────────────────────────────────────
+  // 6. SCROLL REVEAL
+  // ─────────────────────────────────────────────────────────────────
+  (function () {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  })();
+
+  // ─────────────────────────────────────────────────────────────────
+  // 7. NAV scroll shrink
+  // ─────────────────────────────────────────────────────────────────
+  window.addEventListener('scroll', () => {
+    document.getElementById('nav').classList.toggle('scrolled', scrollY > 50);
+  });
+  </script>
 </body>
 </html>
